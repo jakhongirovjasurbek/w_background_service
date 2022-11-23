@@ -147,7 +147,7 @@ void onStart(ServiceInstance service) async {
     }
 
     /// you can see this log in logcat
-    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
+    // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
 
     // test using external plugin
     final deviceInfo = DeviceInfoPlugin();
@@ -162,13 +162,13 @@ void onStart(ServiceInstance service) async {
       device = iosInfo.model;
     }
 
-    service.invoke(
-      'update',
-      {
-        "current_date": DateTime.now().toIso8601String(),
-        "device": device,
-      },
-    );
+    // service.invoke(
+    //   'update',
+    //   {
+    //     "current_date": DateTime.now().toIso8601String(),
+    //     "device": device,
+    //   },
+    // );
   });
 }
 

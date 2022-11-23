@@ -121,10 +121,10 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
         // String notificationChannelId = config.getNotificationChannelId();
         // if (notificationChannelId == null) {
-        //     this.notificationChannelId = "FOREGROUND_DEFAULT";
-            // createNotificationChannel();
+        // this.notificationChannelId = "FOREGROUND_DEFAULT";
+        // createNotificationChannel();
         // } else {
-        //     this.notificationChannelId = notificationChannelId;
+        // this.notificationChannelId = notificationChannelId;
         // }
 
         // notificationTitle = config.getInitialNotificationTitle();
@@ -155,41 +155,45 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
     }
 
     // private void createNotificationChannel() {
-    //     if (SDK_INT >= Build.VERSION_CODES.O) {
-            // CharSequence name = "Background Service";
-            // String description = "Executing process in background";
+    // if (SDK_INT >= Build.VERSION_CODES.O) {
+    // CharSequence name = "Background Service";
+    // String description = "Executing process in background";
 
-            // int importance = NotificationManager.IMPORTANCE_LOW;
-            // NotificationChannel channel = new NotificationChannel(notificationChannelId, name, importance);
-            // channel.setDescription(description);
+    // int importance = NotificationManager.IMPORTANCE_LOW;
+    // NotificationChannel channel = new NotificationChannel(notificationChannelId,
+    // name, importance);
+    // channel.setDescription(description);
 
-            // NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            // notificationManager.createNotificationChannel(channel);
-    //     }
+    // NotificationManager notificationManager =
+    // getSystemService(NotificationManager.class);
+    // notificationManager.createNotificationChannel(channel);
+    // }
     // }
 
-    protected void updateNotificationInfo() {
-        if (config.isForeground()) {
-            String packageName = getApplicationContext().getPackageName();
-            Intent i = getPackageManager().getLaunchIntentForPackage(packageName);
+    // protected void updateNotificationInfo() {
+    // if (config.isForeground()) {
+    // String packageName = getApplicationContext().getPackageName();
+    // Intent i = getPackageManager().getLaunchIntentForPackage(packageName);
 
-            int flags = PendingIntent.FLAG_CANCEL_CURRENT;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                flags |= PendingIntent.FLAG_MUTABLE;
-            }
+    // int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    // flags |= PendingIntent.FLAG_MUTABLE;
+    // }
 
-            PendingIntent pi = PendingIntent.getActivity(BackgroundService.this, 11, i, flags);
-            // NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannelId)
-            //         .setSmallIcon(R.drawable.ic_bg_service_small)
-            //         .setAutoCancel(true)
-            //         .setOngoing(true)
-            //         .setContentTitle(notificationTitle)
-            //         .setContentText(notificationContent)
-            //         .setContentIntent(pi);
+    // PendingIntent pi = PendingIntent.getActivity(BackgroundService.this, 11, i,
+    // flags);
+    // NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,
+    // notificationChannelId)
+    // .setSmallIcon(R.drawable.ic_bg_service_small)
+    // .setAutoCancel(true)
+    // .setOngoing(true)
+    // .setContentTitle(notificationTitle)
+    // .setContentText(notificationContent)
+    // .setContentIntent(pi);
 
-            // startForeground(notificationId, mBuilder.build());
-        }
-    }
+    // startForeground(notificationId, mBuilder.build());
+    // }
+    // }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -203,7 +207,8 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
     @SuppressLint("WakelockTimeout")
     private void runService() {
         try {
-            if (isRunning.get() || (backgroundEngine != null && !backgroundEngine.getDartExecutor().isExecutingDart())) {
+            if (isRunning.get()
+                    || (backgroundEngine != null && !backgroundEngine.getDartExecutor().isExecutingDart())) {
                 Log.v(TAG, "Service already running, using existing service");
                 return;
             }
@@ -223,12 +228,15 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
             isRunning.set(true);
             backgroundEngine = new FlutterEngine(this);
-            backgroundEngine.getServiceControlSurface().attachToService(BackgroundService.this, null, config.isForeground());
+            backgroundEngine.getServiceControlSurface().attachToService(BackgroundService.this, null,
+                    config.isForeground());
 
-            methodChannel = new MethodChannel(backgroundEngine.getDartExecutor().getBinaryMessenger(), "id.flutter/background_service_android_bg", JSONMethodCodec.INSTANCE);
+            methodChannel = new MethodChannel(backgroundEngine.getDartExecutor().getBinaryMessenger(),
+                    "id.flutter/background_service_android_bg", JSONMethodCodec.INSTANCE);
             methodChannel.setMethodCallHandler(this);
 
-            dartEntrypoint = new DartExecutor.DartEntrypoint(flutterLoader.findAppBundlePath(), "package:flutter_background_service_android/flutter_background_service_android.dart", "entrypoint");
+            dartEntrypoint = new DartExecutor.DartEntrypoint(flutterLoader.findAppBundlePath(),
+                    "package:flutter_background_service_android/flutter_background_service_android.dart", "entrypoint");
 
             final List<String> args = new ArrayList<>();
             long backgroundHandle = config.getBackgroundHandle();
@@ -240,7 +248,9 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
             notificationContent = "Error " + e.getMessage();
             // updateNotificationInfo();
 
-            Log.w(TAG, "UnsatisfiedLinkError: After a reboot this may happen for a short period and it is ok to ignore then!" + e.getMessage());
+            Log.w(TAG,
+                    "UnsatisfiedLinkError: After a reboot this may happen for a short period and it is ok to ignore then!"
+                            + e.getMessage());
         }
     }
 
@@ -272,16 +282,16 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
         String method = call.method;
 
         try {
-            if (method.equalsIgnoreCase("setNotificationInfo")) {
-                JSONObject arg = (JSONObject) call.arguments;
-                if (arg.has("title")) {
-                    notificationTitle = arg.getString("title");
-                    notificationContent = arg.getString("content");
-                    // updateNotificationInfo();
-                    result.success(true);
-                }
-                return;
-            }
+            // if (method.equalsIgnoreCase("setNotificationInfo")) {
+            //     JSONObject arg = (JSONObject) call.arguments;
+            //     if (arg.has("title")) {
+            //         notificationTitle = arg.getString("title");
+            //         notificationContent = arg.getString("content");
+            //         // updateNotificationInfo();
+            //         result.success(true);
+            //     }
+            //     return;
+            // }
 
             if (method.equalsIgnoreCase("setAutoStartOnBootMode")) {
                 JSONObject arg = (JSONObject) call.arguments;
