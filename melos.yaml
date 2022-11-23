@@ -1,5 +1,5 @@
 name: flutter_background_service
-repository: https://github.com/ekasetiawans/flutter_background_service
+repository: https://github.com/jakhongirovjasurbek/w_background_service
 
 packages:
   - packages/**

@@ -122,7 +122,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
         String notificationChannelId = config.getNotificationChannelId();
         if (notificationChannelId == null) {
             this.notificationChannelId = "FOREGROUND_DEFAULT";
-            createNotificationChannel();
+            // createNotificationChannel();
         } else {
             this.notificationChannelId = notificationChannelId;
         }
@@ -130,7 +130,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
         notificationTitle = config.getInitialNotificationTitle();
         notificationContent = config.getInitialNotificationContent();
         notificationId = config.getForegroundNotificationId();
-        updateNotificationInfo();
+        // updateNotificationInfo();
     }
 
     @Override
