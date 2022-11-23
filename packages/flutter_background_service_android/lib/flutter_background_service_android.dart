@@ -159,15 +159,15 @@ class AndroidServiceInstance extends ServiceInstance {
     );
   }
 
-  Future<void> setForegroundNotificationInfo({
-    required String title,
-    required String content,
-  }) async {
-    await _channel.invokeMethod("setNotificationInfo", {
-      "title": title,
-      "content": content,
-    });
-  }
+  // Future<void> setForegroundNotificationInfo({
+  //   required String title,
+  //   required String content,
+  // }) async {
+  //   await _channel.invokeMethod("setNotificationInfo", {
+  //     "title": title,
+  //     "content": content,
+  //   });
+  // }
 
   Future<void> setAsForegroundService() async {
     await _channel.invokeMethod("setForegroundMode", {
