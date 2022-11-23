@@ -119,17 +119,17 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
         config = new Config(this);
         mainHandler = new Handler(Looper.getMainLooper());
 
-        String notificationChannelId = config.getNotificationChannelId();
-        if (notificationChannelId == null) {
-            this.notificationChannelId = "FOREGROUND_DEFAULT";
+        // String notificationChannelId = config.getNotificationChannelId();
+        // if (notificationChannelId == null) {
+        //     this.notificationChannelId = "FOREGROUND_DEFAULT";
             // createNotificationChannel();
-        } else {
-            this.notificationChannelId = notificationChannelId;
-        }
+        // } else {
+        //     this.notificationChannelId = notificationChannelId;
+        // }
 
-        notificationTitle = config.getInitialNotificationTitle();
-        notificationContent = config.getInitialNotificationContent();
-        notificationId = config.getForegroundNotificationId();
+        // notificationTitle = config.getInitialNotificationTitle();
+        // notificationContent = config.getInitialNotificationContent();
+        // notificationId = config.getForegroundNotificationId();
         // updateNotificationInfo();
     }
 
@@ -154,19 +154,19 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
         super.onDestroy();
     }
 
-    private void createNotificationChannel() {
-        if (SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Background Service";
-            String description = "Executing process in background";
+    // private void createNotificationChannel() {
+    //     if (SDK_INT >= Build.VERSION_CODES.O) {
+            // CharSequence name = "Background Service";
+            // String description = "Executing process in background";
 
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel channel = new NotificationChannel(notificationChannelId, name, importance);
-            channel.setDescription(description);
+            // int importance = NotificationManager.IMPORTANCE_LOW;
+            // NotificationChannel channel = new NotificationChannel(notificationChannelId, name, importance);
+            // channel.setDescription(description);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
+            // NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            // notificationManager.createNotificationChannel(channel);
+    //     }
+    // }
 
     protected void updateNotificationInfo() {
         if (config.isForeground()) {
@@ -179,15 +179,15 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
             }
 
             PendingIntent pi = PendingIntent.getActivity(BackgroundService.this, 11, i, flags);
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannelId)
-                    .setSmallIcon(R.drawable.ic_bg_service_small)
-                    .setAutoCancel(true)
-                    .setOngoing(true)
-                    .setContentTitle(notificationTitle)
-                    .setContentText(notificationContent)
-                    .setContentIntent(pi);
+            // NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannelId)
+            //         .setSmallIcon(R.drawable.ic_bg_service_small)
+            //         .setAutoCancel(true)
+            //         .setOngoing(true)
+            //         .setContentTitle(notificationTitle)
+            //         .setContentText(notificationContent)
+            //         .setContentIntent(pi);
 
-            startForeground(notificationId, mBuilder.build());
+            // startForeground(notificationId, mBuilder.build());
         }
     }
 
@@ -211,7 +211,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
             Log.v(TAG, "Starting flutter engine for background service");
             getLock(getApplicationContext()).acquire();
 
-            updateNotificationInfo();
+            // updateNotificationInfo();
 
             FlutterLoader flutterLoader = FlutterInjector.instance().flutterLoader();
             // initialize flutter if it's not initialized yet
@@ -238,7 +238,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
 
         } catch (UnsatisfiedLinkError e) {
             notificationContent = "Error " + e.getMessage();
-            updateNotificationInfo();
+            // updateNotificationInfo();
 
             Log.w(TAG, "UnsatisfiedLinkError: After a reboot this may happen for a short period and it is ok to ignore then!" + e.getMessage());
         }
@@ -277,7 +277,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
                 if (arg.has("title")) {
                     notificationTitle = arg.getString("title");
                     notificationContent = arg.getString("content");
-                    updateNotificationInfo();
+                    // updateNotificationInfo();
                     result.success(true);
                 }
                 return;
@@ -296,7 +296,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
                 boolean value = arg.getBoolean("value");
                 config.setIsForeground(value);
                 if (value) {
-                    updateNotificationInfo();
+                    // updateNotificationInfo();
                     backgroundEngine.getServiceControlSurface().onMoveToForeground();
                 } else {
                     stopForeground(true);
